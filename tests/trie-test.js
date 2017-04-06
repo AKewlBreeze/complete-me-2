@@ -76,7 +76,7 @@ describe('trie', () => {
 
   })
 
-  it ('should count how many times a user has selected a particular word', () => {
+  it('should count how many times a user has selected a particular word', () => {
     let trie = new Trie()
 
     // let suggest = trie.suggest('musi')

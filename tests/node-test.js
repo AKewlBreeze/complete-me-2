@@ -20,9 +20,10 @@ describe('node', () => {
     assert.equal(node.letter, 'music')
   })
 
-it('it should begin with an empty object as children', () => {
-  let node = new Node()
-  assert.equal(node.children, {})
-})
+  it('it should begin with an empty object as children', () => {
+    let node = new Node()
+
+    assert.deepEqual(node.children, {})
+  })
 
 });
