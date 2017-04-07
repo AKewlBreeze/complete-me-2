@@ -15,7 +15,7 @@ export default class Trie  {
     let currentNode = this.head;
 
     while (word.length) {
-      let firstLetter = word.splice(0, 1);      
+      let firstLetter = word.splice(0, 1);
 
       firstLetter = firstLetter[0];
 
@@ -51,62 +51,38 @@ export default class Trie  {
   }
 
 
-  lookDown (currentNode, prefix) {
-    if (currentNode.isWord) {
-      let wordCountTally = currentNode.isWord + ':' + prefix
+  lookDown (currentNode, prefix, array) {
+    let suggest = array || []
 
-      this.suggest.push(wordCountTally)
+    if (currentNode.isWord) {
+      let wordAndCount = {count: currentNode.timesSelected, prefix}
+
+      suggest.push(wordAndCount)
     }
     Object.keys(currentNode.children).forEach((val) => {
       let tempPrefix = prefix + val
 
-      this.lookDown(currentNode.children[val], tempPrefix)
+      this.lookDown(currentNode.children[val], tempPrefix, suggest)
+    })
+    let sortedWordCountArray = suggest.sort((a, b) => {
+      return b.count - a.count
     })
 
-  }
-
-  // sortWordCountNumbers(array){
-  // for (let i = 0; i < array.length; i++) {
-  //   for (let j = 1; j < array.length; j++) {
-  //     if (array[j - 1] < array[j]) {
-  //       [array[j - 1], array[j]] = [array[j], array[j - 1]];
-  //     }
-  //   }
-  // }
-  // return array;
-  // };
-  //
-  // suggest (word) {
-  //   this.suggest = [];
-  //   let prefix = word
-  //   let currentNode = this.find(word)
-  //
-  //   this.suggest = this.lookDown(currentNode, prefix)
-  //   // let sortedWord = sortWordCountNumbers(this.suggest)
-  //   return this.suggest
-  // }
-
-
-  sortWordCountNumbers(array) {
-    for (let i = 0; i < array.length; i++) {
-      for (let j = 1; j < array.length; j++) {
-        if (array[j - 1] < array[j]) {
-          [array[j - 1], array[j]] = [array[j], array[j - 1]];
-        }
-      }
-    }
-    return array;
+    let finalWordArray = sortedWordCountArray.map(i => {
+      return i.prefix
+    })
+    
+    return finalWordArray
   }
 
   suggest (word) {
-    this.suggest = [];
     let prefix = word
     let currentNode = this.find(word)
 
-    this.lookDown(currentNode, prefix)
-    return this.suggest
-  }
+    let suggestResults = this.lookDown(currentNode, prefix)
 
+    return suggestResults
+  }
 
   select(userWord) {
     let currentLetter  = this.head;
@@ -118,7 +94,7 @@ export default class Trie  {
       }
       return currentLetter;
     })
-    currentLetter.isWord > 0 ? currentLetter.isWord++ : null
-  //  if true, do this, else do that
+    currentLetter.timesSelected++
+
   }
 }
