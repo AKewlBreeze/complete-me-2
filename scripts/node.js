@@ -3,6 +3,7 @@ export default class Node {
     this.letter = letter;
     this.isWord = 0
     this.children = {}
+    this.timesSelected = 0
   }
 
 
